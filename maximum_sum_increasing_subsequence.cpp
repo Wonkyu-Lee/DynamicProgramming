@@ -9,7 +9,7 @@ namespace {
 int maximumSum(int A[], int n) {
     int dp[n];
     for (int i = 0; i < n; ++i) {
-        dp[i] = A[i]; // 초기화 하는 걸 잊지 말자!
+        dp[i] = A[i]; // 초기화 잊지 말자!
         for (int j = 0; j < i; ++j) {
             if (A[j] <= A[i]) {
                 dp[i] = max(dp[i], dp[j] + A[i]);
