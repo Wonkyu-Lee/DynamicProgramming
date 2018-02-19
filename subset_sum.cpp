@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include <iostream>
 #include <list>
+#include <unordered_map>
 
 using namespace std;
 
@@ -45,7 +46,7 @@ bool hasSubsetSumPrt(int* set, int n, int sum) {
         }
     }
 
-    // print
+    // print just one case
 //    if (dp[n][sum]) {
 //        list<int> subset;
 //        int i = n;
@@ -93,6 +94,82 @@ bool hasSubsetSum2(int set[], int n, int sum) {
     return dpCurr[sum];
 }
 
+// S(n, sum) = S(n - 1, sum) + S(n - 1, sum - set[n - 1])
+int countAllSubsetSum(int set[], int n, int sum) {
+    int dp[n + 1][sum + 1];
+    memset(dp, 0, sizeof(dp));
+    for (int i = 0; i <= n; ++i) {
+        for (int j = 0; j <= sum; ++j) {
+            if (j == 0) {
+                dp[i][j] = 1;
+            } else  if (i == 0) {
+                dp[i][j] = 0;
+            } else {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= set[i - 1]) {
+                    dp[i][j] += dp[i - 1][j - set[i - 1]];
+                }
+            }
+        }
+    }
+    return dp[n][sum];
+}
+
+// S(i, j) = S(i - 1, j) + S(i - 1, j - set[i - 1])
+//
+int countAllSubsetSumPrt(int set[], int n, int sum) {
+    int dp[n + 1][sum + 1];
+
+    memset(dp, 0, sizeof(dp));
+    for (int i = 0; i <= n; ++i) {
+        for (int j = 0; j <= sum; ++j) {
+            if (j == 0) {
+                dp[i][j] = 1;
+            } else  if (i == 0) {
+                dp[i][j] = 0;
+            } else {
+                int left = 0;
+                int right = 0;
+                left = dp[i - 1][j];
+
+                if (j >= set[i - 1]) {
+                    right = dp[i - 1][j - set[i - 1]];
+                }
+                dp[i][j] = left + right;
+            }
+        }
+    }
+
+
+    function<void(int, int, list<int>&)> prt = [&](int i, int j, list<int>& subset) {
+        if (dp[i][j] == 0) return;
+
+        if (j == 0) {
+            for (auto e : subset) {
+                cout << e << " ";
+            }
+            cout << endl;
+
+            return;
+        }
+
+        if (dp[i-1][j] > 0) {
+            prt(i - 1, j, subset);
+        }
+
+        if (j >= set[i - 1] && dp[i - 1][j - set[i - 1]] > 0) {
+            subset.push_back(set[i - 1]);
+            prt(i - 1, j - set[i - 1], subset);
+            subset.pop_back();
+        }
+    };
+
+    list<int> _subset;
+    prt(n, sum, _subset);
+
+    return dp[n][sum];
+}
+
 } // namespace
 
 TEST_CASE("Subset sum", "[subset sum]") {
@@ -101,4 +178,7 @@ TEST_CASE("Subset sum", "[subset sum]") {
     REQUIRE(hasSubsetSumPrt(set, n, 9));
     REQUIRE(hasSubsetSumPrt(set, n, 1) == false);
     REQUIRE(hasSubsetSumPrt(set, n, 17));
+
+    REQUIRE(countAllSubsetSum(set, n, 17) == 2);
+    //REQUIRE(countAllSubsetSumPrt(set, n, 17) == 2);
 }

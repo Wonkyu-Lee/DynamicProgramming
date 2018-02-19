@@ -46,7 +46,7 @@ int maxValueSumDp(int* weights, int* values, int n, int capacity) {
             if (i == 0 || j == 0) {
                 dp[i][j] = 0;
             } else {
-                int excludingLast = dp[i - 1][j];
+                int excludingLast = dp[i - 1][j]; // don't forget this term!
                 int includingLast = 0;
                 if (j >= weights[i - 1]) {
                     includingLast = dp[i - 1][j - weights[i - 1]] + values[i - 1];

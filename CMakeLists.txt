@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(DinamicProgramming)
+project(DynamicProgramming)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -16,5 +16,8 @@ set(SOURCE_FILES main.cpp
         subset_sum.cpp
         min_jumps.cpp
         car_assembly.cpp
-        maximum_sum_increasing_subsequence.cpp optimal_binary_search_tree.cpp)
-add_executable(DinamicProgramming ${SOURCE_FILES})
+        maximum_sum_increasing_subsequence.cpp
+        optimal_binary_search_tree.cpp
+        edit_distance.cpp
+        matrix_chain_multiplication.cpp)
+add_executable(DynamicProgramming ${SOURCE_FILES})

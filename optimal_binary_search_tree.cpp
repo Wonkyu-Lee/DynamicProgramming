@@ -20,11 +20,10 @@ int optCost(int freq[], int n) {
         fs[i] = fs[i - 1] + freq[i];
     }
 
-    // len: diagonal length
-    for (int len = n; len >= 1; --len) {
-        int delta = n - len;
-        for (int i = 0; i < len; ++i) {
-            int j = i + delta;
+    // L: chain(i..j) length
+    for (int L = 1; L <= n; ++L) {
+        for (int i = 0; i <= n - L; ++i) {
+            int j = i + L - 1;
             int freqSum = fs[j] - ((i >= 1) ? fs[i - 1] : 0);
 
             dp[i][j] = INT_MAX;
@@ -34,7 +33,7 @@ int optCost(int freq[], int n) {
                     val += dp[i][r - 1];
                 }
                 if (r < j) {
-                   val += dp[r + 1][j];
+                    val += dp[r + 1][j];
                 }
                 if (val < dp[i][j]) {
                     dp[i][j] = val;
@@ -111,11 +110,11 @@ NodePtr optCostPrt(int keys[N], int freq[N]) {
         fs[i] = fs[i - 1] + freq[i];
     }
 
-    // len: diagonal length
-    for (int len = N; len >= 1; --len) {
-        int delta = N - len;
-        for (int i = 0; i < len; ++i) {
-            int j = i + delta;
+    // L: chain(i..j) length
+    for (int L = 1; L <= N; ++L) {
+        for (int i = 0; i <= N - L; ++i) {
+            int j = i + L - 1;
+
             int freqSum = fs[j] - ((i >= 1) ? fs[i - 1] : 0);
 
             dp[i][j] = INT_MAX;
