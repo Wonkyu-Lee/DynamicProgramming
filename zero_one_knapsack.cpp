@@ -58,6 +58,32 @@ int maxValueSumDp(int* weights, int* values, int n, int capacity) {
     return dp[n][capacity];
 }
 
+int maxValueSumDp2(int* weights, int* values, int n, int capacity) {
+    int dp[2][capacity + 1];
+    memset(dp, 0, sizeof(dp));
+    int* prev = dp[0];
+    int* curr = dp[1];
+
+    for (int i = 0; i <= n; ++i) {
+        for (int j = 0; j <= capacity; ++j) {
+            if (i == 0 || j == 0) {
+                curr[j] = 0;
+            } else {
+                int excludingLast = prev[j]; // don't forget this term!
+                int includingLast = 0;
+                if (j >= weights[i - 1]) {
+                    includingLast = prev[j - weights[i - 1]] + values[i - 1];
+                }
+                curr[j] = max(excludingLast, includingLast);
+            }
+        }
+
+        swap(prev, curr);
+    }
+
+    return prev[capacity];
+}
+
 list<int> maxValueSumMmPrt(int* weights, int* values, int n, int capacity) {
     unordered_map<int, int> memo[n + 1];
 
@@ -113,6 +139,7 @@ TEST_CASE("0-1 Knapsack", "[knapsack]") {
         REQUIRE(maxValueSum(weights, values, n, capacity) == 3);
         REQUIRE(maxValueSumMm(weights, values, n, capacity) == 3);
         REQUIRE(maxValueSumDp(weights, values, n, capacity) == 3);
+        REQUIRE(maxValueSumDp2(weights, values, n, capacity) == 3);
         REQUIRE((maxValueSumMmPrt(weights, values, n, capacity) == list<int>({2})));
     }
 
@@ -125,6 +152,7 @@ TEST_CASE("0-1 Knapsack", "[knapsack]") {
         REQUIRE(maxValueSum(weights, values, n, capacity) == 220);
         REQUIRE(maxValueSumMm(weights, values, n, capacity) == 220);
         REQUIRE(maxValueSumDp(weights, values, n, capacity) == 220);
+        REQUIRE(maxValueSumDp2(weights, values, n, capacity) == 220);
         REQUIRE((maxValueSumMmPrt(weights, values, n, capacity) == list<int>({1, 2})));
     }
 

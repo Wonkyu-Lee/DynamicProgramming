@@ -19,5 +19,5 @@ set(SOURCE_FILES main.cpp
         maximum_sum_increasing_subsequence.cpp
         optimal_binary_search_tree.cpp
         edit_distance.cpp
-        matrix_chain_multiplication.cpp)
+        matrix_chain_multiplication.cpp unbounded_knapsack.cpp)
 add_executable(DynamicProgramming ${SOURCE_FILES})
